@@ -4,7 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Provider from "./provider";
 
-const appFont = DM_Sans({
+const appFonts = DM_Sans({
   subsets: ["latin"],
 });
 
@@ -21,8 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${appFont.className} h-full antialiased`}>
-        <body className="min-h-full flex flex-col">
+      <html lang="en">
+        <body className={appFonts.className}>
           <Provider>{children}</Provider>
         </body>
       </html>
