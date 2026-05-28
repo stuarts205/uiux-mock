@@ -19,10 +19,10 @@ import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { cn } from "@/lib/utils";
 import { suggestions } from "@/data/constant";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { randomUUID } from "crypto";
 import { set } from "date-fns";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
   const [userInput, setUserInput] = useState<string>();
@@ -48,7 +48,7 @@ const Hero = () => {
 
     console.log(result.data)
     setLoading(false);
-    //router.push(`/project/${projectId}`)
+    router.push(`/project/${projectId}`)
   }
 
   return (
