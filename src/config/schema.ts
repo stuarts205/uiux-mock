@@ -17,6 +17,8 @@ export const usersTable = pgTable("users", {
 export const ProjectTable = pgTable("project", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   projectId: varchar().notNull(),
+  projectName: varchar(),
+  theme: varchar(),
   userInput: varchar(),
   device: varchar(),
   createdOn: date().defaultNow(),
@@ -25,4 +27,14 @@ export const ProjectTable = pgTable("project", {
   userId: varchar()
     .references(() => usersTable.email)
     .notNull(),
+});
+
+export const ScreenConfigTable = pgTable("screenConfig", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  projectId: varchar().references(() => ProjectTable.projectId),
+  screenId: varchar(),
+  screenName: varchar(),
+  purpose: varchar(),
+  screenDescription: varchar(),
+  code: text(),
 });

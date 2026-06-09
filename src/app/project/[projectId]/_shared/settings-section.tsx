@@ -3,22 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { THEME_NAME_LIST, THEMES } from "@/data/themes";
-import { ProjectType } from "@/type/type";
+import { ProjectType, ScreenConfig } from "@/type/type";
 import { Camera, CameraIcon, Share, SparkleIcon, Sparkles } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-type Props = {
+type SettingsSectionProps = {
   projectDetail: ProjectType | undefined;
-};
+}
 
-const SettingsSection = () => {
+const SettingsSection = ({ projectDetail }: SettingsSectionProps) => {
   const [selectedTheme, setSelectedTheme] = useState("AURORA_INK");
-  const [projectName, setProjectName] = useState('');
+  const [projectName, setProjectName] = useState(projectDetail?.projectName || "");
   const [userNewScreeInput, setUserNewScreeInput] = useState<string>();
 
-  // useEffect(() => {
-  //   projectDetail && setProjectName(projectDetail?.projectName);
-  // }, [projectDetail]);
+  useEffect(() => {
+    projectDetail && setProjectName(projectDetail?.projectName || "");
+  }, [projectDetail]);
 
   return (
     <div className="w-75 h-[90vh] p-5 border-r">
