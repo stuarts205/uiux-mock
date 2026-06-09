@@ -32,8 +32,10 @@ const ProjectCanvasPlayground = () => {
   };
 
   useEffect(() => {
-    if(projectDetail && screenConfig && screenConfig.length === 0){
+    if (projectDetail && screenConfig && screenConfig.length === 0) {
       generateScreenConfig();
+    } else if (projectDetail && screenConfig) {
+      genterateScreenUi();
     }
   }, [projectDetail && screenConfig]);
 
@@ -48,7 +50,30 @@ const ProjectCanvasPlayground = () => {
     console.log(result.data);
     getProjectDetail();
     setLoading(false);
-  }
+  };
+
+  const genterateScreenUi = async () => {
+    setLoading(true);
+
+    for (let index = 0; index < screenConfig.length; index++) {
+      const screen = screenConfig[index];
+      if (screen?.code) continue;
+      setLoadingMsg(`Generating UI for ${index + 1}...`);
+      const result = await axios.post("/api/generate-screen-ui", {
+        projectId,
+        screenId: screen?.screenId,
+        screenName: screen?.screenName,
+        purpose: screen?.purpose,
+        screenDecsription: screen?.screenDescription,
+      });
+      
+      setScreenConfig((prev) =>
+        prev.map((item, i) => (i === index ? result.data : item)),
+      );
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div>
@@ -61,7 +86,7 @@ const ProjectCanvasPlayground = () => {
             </h2>
           </div>
         )}
-        <SettingsSection projectDetail={projectDetail}/>
+        <SettingsSection projectDetail={projectDetail} />
       </div>
     </div>
   );
