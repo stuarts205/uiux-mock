@@ -6,10 +6,12 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { ProjectType, ScreenConfig } from "@/type/type";
 import { Loader2Icon } from "lucide-react";
+import Canvas from "./_shared/canvas";
 
 const ProjectCanvasPlayground = () => {
   const { projectId } = useParams();
   const [projectDetail, setProjectDetail] = useState<ProjectType>();
+  const [screenConfigOriginal, setScreenConfigOriginal] = useState<ScreenConfig[]>([]);
   const [screenConfig, setScreenConfig] = useState<ScreenConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMsg, setLoadingMsg] = useState("Loading...");
@@ -24,6 +26,7 @@ const ProjectCanvasPlayground = () => {
     const result = await axios.get(`/api/project?projectId=${projectId}`);
     console.log(result.data);
     setProjectDetail(result.data?.projectDetail);
+    setScreenConfigOriginal(result.data?.screenConfig || []);
     setScreenConfig(result.data?.screenConfig);
     // if(result.data?.screenConfig?.length===0){
     //   generateScreenConfig()
@@ -32,12 +35,12 @@ const ProjectCanvasPlayground = () => {
   };
 
   useEffect(() => {
-    if (projectDetail && screenConfig && screenConfig.length === 0) {
+    if (projectDetail && screenConfigOriginal && screenConfig.length === 0) {
       generateScreenConfig();
-    } else if (projectDetail && screenConfig) {
+    } else if (projectDetail && screenConfigOriginal) {
       genterateScreenUi();
     }
-  }, [projectDetail && screenConfig]);
+  }, [screenConfigOriginal]);
 
   const generateScreenConfig = async () => {
     setLoading(true);
@@ -78,7 +81,7 @@ const ProjectCanvasPlayground = () => {
   return (
     <div>
       <ProjectHeader />
-      <div>
+      <div className='flex'>
         {loading && (
           <div className="p-3 absolute bg-blue-300/20 border border-blue-400 rounded-xl left-1/2 top-20">
             <h2 className="flex items-center gap-2 text-sm">
@@ -87,6 +90,7 @@ const ProjectCanvasPlayground = () => {
           </div>
         )}
         <SettingsSection projectDetail={projectDetail} />
+        <Canvas projectDetail={projectDetail} screenConfig={screenConfig} />
       </div>
     </div>
   );
